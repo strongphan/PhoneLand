@@ -18,7 +18,7 @@ $admin->email = $data->email;
 $admin->avatar = $data->avatar;
 $admin->last_login =$data->last_login;
 $admin->status = $data->status;
-$admin->update_at = $data->update_at; 
+$admin->updated_at = $data->updated_at; 
 if($admin->create()){
     echo json_encode(array('message','Question Created'));
 }else{

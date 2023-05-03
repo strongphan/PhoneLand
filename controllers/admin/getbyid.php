@@ -18,7 +18,7 @@ $admin_info = array(
     'avatar' => $admin->avatar,
     'last_login' => $admin->last_login,
     'status' => $admin->status,
-    'create_at' => $admin->create_at,
-    'update_at' => $admin->update_at
+    'create_at' => $admin->created_at,
+    'update_at' => $admin->updated_at
 
 );
