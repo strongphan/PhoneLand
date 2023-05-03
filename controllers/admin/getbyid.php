@@ -2,7 +2,12 @@
 include_once("../Controller.php");
 include_once("../../models/AdminModel.php");
 $admin = new AdminModel();
-$admin->id = isset($_GET['id']) ? $_GET['id'] : die();
+$error = "";
+$admin->id = isset($_GET['id']) ? $_GET['id'] : $error = "Co loi";
+if($error != ""){
+    echo $error;
+    return;
+}
 $admin->getById($_GET['id']);
 $admin_info = array(
 

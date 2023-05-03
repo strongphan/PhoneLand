@@ -20,7 +20,7 @@ $admin->last_login =$data->last_login;
 $admin->status = $data->status;
 $admin->updated_at = $data->updated_at; 
 if($admin->create()){
-    echo json_encode(array('message','Question Created'));
+    echo json_encode(array('message','Thêm admin thành công'));
 }else{
-    echo json_encode(array('message','Question Not Created'));
+    echo json_encode(array('message','Thêm admin thất bại'));
 }
