@@ -1,6 +1,5 @@
 <?php
-
-include_once("../models/Model.php");
+include_once("../../models/Model.php");
 class AdminModel extends Model{
     public $id;
     public $adminname;
@@ -41,8 +40,8 @@ class AdminModel extends Model{
         $this->update_at = $row['update_at'];
     }
     public function create(){
-        $query = "INSERT INTO admins(adminname, password, role,  first_name, last_name, phone, address, email, avatar, last_login, status, create_at, update_at)
-VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, :email, :avatar, :last_login, :status, :create_at, :update_at)";
+        $query = "INSERT INTO admins(adminname, password, role,  first_name, last_name, phone, address, email, avatar, last_login, status, update_at)
+VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, :email, :avatar, :last_login, :status, :update_at)";
         $stmt = $this->conn->prepare($query);
         $this->adminname = htmlspecialchars(strip_tags($this->adminname));
         $this->role = htmlspecialchars(strip_tags($this->role));
@@ -55,7 +54,6 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $this->avatar = htmlspecialchars(strip_tags($this->avatar));
         $this->last_login = htmlspecialchars(strip_tags($this->last_login));
         $this->status = htmlspecialchars(strip_tags($this->status));
-        $this->create_at = htmlspecialchars(strip_tags($this->create_at));
         $this->update_at = htmlspecialchars(strip_tags($this->update_at));
         $stmt->bindParam(':adminname', $this->adminname);
         $stmt->bindParam(':password', $this->password);
@@ -68,7 +66,6 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $stmt->bindParam(':avatar', $this->avatar);
         $stmt->bindParam(':last_login', $this->last_login);
         $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':create_at', $this->create_at);
         $stmt->bindParam(':update_at', $this->update_at);
         if($stmt->execute()){
             return true;

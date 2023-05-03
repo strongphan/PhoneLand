@@ -1,9 +1,9 @@
 <?php
 include_once("../Controller.php");
-include_once("./models/AdminModel.php");
+include_once("../../models/AdminModel.php");
 $admin = new AdminModel();
 $admin->id = isset($_GET['id']) ? $_GET['id'] : die();
-$admin->getById($id);
+$admin->getById($_GET['id']);
 $admin_info = array(
 
     'id' => $admin->id,
