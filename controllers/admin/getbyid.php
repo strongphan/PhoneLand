@@ -17,7 +17,7 @@ $num = $stmt -> rowCount();
     } else {
         $admin_info = [
             "status" => "failure",
-            "message" => "No books found."
+            "message" => "No user found."
         ];
     }
 
