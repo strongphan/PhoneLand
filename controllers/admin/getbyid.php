@@ -1,29 +1,27 @@
 <?php
-include_once("../Controller.php");
+
+include_once("../../config/config.php");
 include_once("../../models/AdminModel.php");
+
 $admin = new AdminModel();
-$error = "";
-$admin->id = isset($_GET['id']) ? $_GET['id'] : $error = "Co loi";
-if($error != ""){
-    echo $error;
-    return;
-}
-$admin->getById($_GET['id']);
-$admin_info = array(
+$admin->id = isset($_GET['id']) ? $_GET['id'] : die();
+$stmt = $admin->getById($admin->id);
 
-    'id' => $admin->id,
-    'adminname' => $admin->adminname,
-    'role' => $admin->role,
-    'password' => $admin->password,
-    'fist_name' => $admin->fist_name,
-    'last_name' => $admin->last_name,
-    'phone' => $admin->phone,
-    'address' => $admin->address,
-    'email' => $admin->email,
-    'avatar' => $admin->avatar,
-    'last_login' => $admin->last_login,
-    'status' => $admin->status,
-    'create_at' => $admin->created_at,
-    'update_at' => $admin->updated_at
+$num = $stmt -> rowCount();
 
-);
+    if ($num > 0) {
+        $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+        $admin_info = [
+            "status" => "success",
+            "data" => $data
+        ];
+    } else {
+        $admin_info = [
+            "status" => "failure",
+            "message" => "No user found."
+        ];
+    }
+
+echo json_encode($admin_info);
+?>
+
