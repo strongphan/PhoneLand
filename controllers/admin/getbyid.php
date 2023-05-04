@@ -1,4 +1,5 @@
 <?php
+
 include_once("../../config/config.php");
 include_once("../../models/AdminModel.php");
 
@@ -23,3 +24,4 @@ $num = $stmt -> rowCount();
 
 echo json_encode($admin_info);
 ?>
+
