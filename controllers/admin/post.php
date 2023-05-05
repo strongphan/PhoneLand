@@ -22,6 +22,7 @@ $admin->status = $data->status;
 $admin->updated_at = $data->updated_at; 
 if($admin->create()){
     echo json_encode(array('message','Thêm admin thành công'));
+    $admin->getById($admin0->id);
 }else{
     echo json_encode(array('message','Thêm admin thất bại'));
 }
