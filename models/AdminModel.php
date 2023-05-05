@@ -6,7 +6,7 @@ class AdminModel extends Model{
     public $adminname;
     public $role;
     public $password;
-    public $fist_name;
+    public $first_name;
     public $last_name;
     public $phone;
     public $address;
@@ -27,6 +27,14 @@ class AdminModel extends Model{
         $stmt->execute();
         return $stmt;
     }
+
+    public function countAdminname($name){
+        $query = "SELECT count(*) as count FROM admins WHERE adminname = :adminname";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':adminname', $name, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
     
     public function create(){
         $query = "INSERT INTO admins(adminname, password, role,  first_name, last_name, phone, address, email, avatar, last_login, status, updated_at)
@@ -35,7 +43,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $this->adminname =  htmlspecialchars(strip_tags($this->adminname));
         $this->role =       htmlspecialchars(strip_tags($this->role));
         $this->password =   htmlspecialchars(strip_tags($this->password));
-        $this->fist_name =  htmlspecialchars(strip_tags($this->fist_name));
+        $this->first_name =  htmlspecialchars(strip_tags($this->first_name));
         $this->last_name =  htmlspecialchars(strip_tags($this->last_name));
         $this->phone =      htmlspecialchars(strip_tags($this->phone));
         $this->address =    htmlspecialchars(strip_tags($this->address));
@@ -49,7 +57,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $stmt->bindParam(':adminname', $this->adminname);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':role', $this->role);
-        $stmt->bindParam(':first_name', $this->fist_name);
+        $stmt->bindParam(':first_name', $this->first_name);
         $stmt->bindParam(':last_name', $this->last_name);
         $stmt->bindParam(':phone', $this->phone);
         $stmt->bindParam(':address', $this->address);
@@ -83,7 +91,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
 
         $this->role =       htmlspecialchars(strip_tags($this->role));
         $this->password =   htmlspecialchars(strip_tags($this->password));
-        $this->fist_name =  htmlspecialchars(strip_tags($this->fist_name));
+        $this->first_name =  htmlspecialchars(strip_tags($this->first_name));
         $this->last_name =  htmlspecialchars(strip_tags($this->last_name));
         $this->phone =      htmlspecialchars(strip_tags($this->phone));
         $this->address =    htmlspecialchars(strip_tags($this->address));
@@ -97,7 +105,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':role', $this->role);
-        $stmt->bindParam(':first_name', $this->fist_name);
+        $stmt->bindParam(':first_name', $this->first_name);
         $stmt->bindParam(':last_name', $this->last_name);
         $stmt->bindParam(':phone', $this->phone);
         $stmt->bindParam(':address', $this->address);

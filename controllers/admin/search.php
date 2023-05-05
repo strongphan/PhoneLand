@@ -9,7 +9,7 @@
     $l = isset($_GET['l']) ? $_GET['l'] : "null";
     if($q == null) {
     	$admins = [
-            "status" => "failure",
+            "status" => "fail",
             "message" => "No admin found."
         ];
     }
@@ -25,7 +25,7 @@
 	        ];
 	    } else {
 	        $admins = [
-	            "status" => "failure",
+	            "status" => "fail",
 	            "message" => "No admin found."
 	        ];
 	    }
