@@ -21,8 +21,8 @@ class AdminModel extends Model{
         parent::__construct();
     }
     public function getById($id){
-        $sql = "SELECT * FROM admins WHERE id = :id";
-        $stmt = $this->conn->prepare($sql);
+        $query = "SELECT * FROM admins WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt;
@@ -113,9 +113,18 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         return false;
     }
     public function delete($id){
-        $sql = "DELETE FROM admins WHERE id = :id";
-        $stmt = $this->conn->prepare($sql);
+        $query = "DELETE FROM admins WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
+    public function search($query, $limit)
+    {
+        $sql = "SELECT * FROM admins WHERE adminname LIKE :query LIMIT :limit";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':query', "%$query%", PDO::PARAM_STR);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt;
     }
