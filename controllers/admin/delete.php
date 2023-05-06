@@ -8,12 +8,14 @@
     $admin->id = isset($_GET['id']) ? $_GET['id'] : die();
 
     if($admin->delete($admin->id)){
-        echo json_encode(array(
+        $admin_info = [
             "status" => "success",
-            'message'=>'Xóa thông tin admin thành công'));
-    
-    }else{
-        echo json_encode(array(
+            "message" => "Đăng nhập thành công"
+        ];
+    } else {
+        $admin_info = [
             "status" => "fail",
-            'message'=>'Xóa thông tin admin thất bại'));
+            "message" => "Tài khoản hoặc mật khẩu không chính xác"
+        ];
     }
+    echo json_encode($admin_info);
