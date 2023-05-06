@@ -11,7 +11,7 @@ $data = json_decode(file_get_contents("php://input"));
 $admin->id = isset($_GET['id']) ? $_GET['id'] : die();
 $admin->role = $data->role;
 $admin->password = $data->password;
-$admin->fist_name = $data->fist_name;
+$admin->first_name = $data->first_name;
 $admin->last_name = $data->last_name;
 $admin->phone = $data->phone;
 $admin->address = $data->address;
@@ -21,9 +21,14 @@ $admin->last_login =$data->last_login;
 $admin->status = $data->status;
 $admin->updated_at = $data->updated_at; 
 if($admin->update($admin->id)){
-    echo json_encode(array('message','Sửa thông tin admin thành công'));
-    $admin->getById($admin0->id);
-
-}else{
-    echo json_encode(array('message','Sửa thông tin admin thất bại'));
+    $admin_info = [
+        "status" => "success",
+        "message" => "sửa thông tin admin thành công"
+    ];
+} else {
+    $admin_info = [
+        "status" => "fail",
+        "message" => "Sửa thông tin admin thất bại"
+    ];
 }
+echo json_encode($admin_info);
