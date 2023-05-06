@@ -1,13 +1,13 @@
 <?php
 
-include_once("../../config/config.php");
-include_once("../../models/AdminModel.php");
+    include_once("../../config/config.php");
+    include_once("../../models/AdminModel.php");
 
-$admin = new AdminModel();
-$admin->id = isset($_GET['id']) ? $_GET['id'] : die();
-$stmt = $admin->getById($admin->id);
+    $admin = new AdminModel();
+    $admin->id = isset($_GET['id']) ? $_GET['id'] : "null";
+    $stmt = $admin->getById($admin->id);
 
-$num = $stmt -> rowCount();
+    $num = $stmt -> rowCount();
 
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
@@ -17,11 +17,11 @@ $num = $stmt -> rowCount();
         ];
     } else {
         $admin_info = [
-            "status" => "failure",
+            "status" => "fail",
             "message" => "No user found."
         ];
     }
 
-echo json_encode($admin_info);
+    echo json_encode($admin_info);
 ?>
 
