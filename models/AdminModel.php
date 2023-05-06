@@ -27,6 +27,14 @@ class AdminModel extends Model{
         $stmt->execute();
         return $stmt;
     }
+
+    public function countAdminname($name){
+        $query = "SELECT count(*) as count FROM admins WHERE adminname = :adminname";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':adminname', $name, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
     
     public function create(){
         $query = "INSERT INTO admins(adminname, password, role,  first_name, last_name, phone, address, email, avatar, last_login, status, updated_at)
