@@ -6,7 +6,7 @@ class AdminModel extends Model{
     public $adminname;
     public $role;
     public $password;
-    public $fist_name;
+    public $first_name;
     public $last_name;
     public $phone;
     public $address;
@@ -35,7 +35,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $this->adminname =  htmlspecialchars(strip_tags($this->adminname));
         $this->role =       htmlspecialchars(strip_tags($this->role));
         $this->password =   htmlspecialchars(strip_tags($this->password));
-        $this->fist_name =  htmlspecialchars(strip_tags($this->fist_name));
+        $this->first_name =  htmlspecialchars(strip_tags($this->first_name));
         $this->last_name =  htmlspecialchars(strip_tags($this->last_name));
         $this->phone =      htmlspecialchars(strip_tags($this->phone));
         $this->address =    htmlspecialchars(strip_tags($this->address));
@@ -43,13 +43,12 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $this->avatar =     htmlspecialchars(strip_tags($this->avatar));
         $this->last_login = htmlspecialchars(strip_tags($this->last_login));
         $this->status =     htmlspecialchars(strip_tags($this->status));
-        $this->created_at =  htmlspecialchars(strip_tags($this->created_at));
         $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
 
         $stmt->bindParam(':adminname', $this->adminname);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':role', $this->role);
-        $stmt->bindParam(':first_name', $this->fist_name);
+        $stmt->bindParam(':first_name', $this->first_name);
         $stmt->bindParam(':last_name', $this->last_name);
         $stmt->bindParam(':phone', $this->phone);
         $stmt->bindParam(':address', $this->address);
@@ -83,7 +82,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
 
         $this->role =       htmlspecialchars(strip_tags($this->role));
         $this->password =   htmlspecialchars(strip_tags($this->password));
-        $this->fist_name =  htmlspecialchars(strip_tags($this->fist_name));
+        $this->first_name =  htmlspecialchars(strip_tags($this->first_name));
         $this->last_name =  htmlspecialchars(strip_tags($this->last_name));
         $this->phone =      htmlspecialchars(strip_tags($this->phone));
         $this->address =    htmlspecialchars(strip_tags($this->address));
@@ -91,13 +90,12 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $this->avatar =     htmlspecialchars(strip_tags($this->avatar));
         $this->last_login = htmlspecialchars(strip_tags($this->last_login));
         $this->status =     htmlspecialchars(strip_tags($this->status));
-        $this->created_at =  htmlspecialchars(strip_tags($this->created_at));
         $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
 
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':role', $this->role);
-        $stmt->bindParam(':first_name', $this->fist_name);
+        $stmt->bindParam(':first_name', $this->first_name);
         $stmt->bindParam(':last_name', $this->last_name);
         $stmt->bindParam(':phone', $this->phone);
         $stmt->bindParam(':address', $this->address);
