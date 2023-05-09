@@ -19,17 +19,23 @@
     $category->avatar = $data->avatar;
     $category->status = $data->status;
     $category->updated_at = $data->updated_at; 
-    if($category->create()){
+    if(empty($data->name)){
         $admin_info = [
             "status" => "success",
-            "message" => "Thêm category thành công"
+            "message" => "Không được để trống tên"
         ];
-    } else {
-        $admin_info = [
-            "status" => "fail",
-            "message" => "Thêm category thất bại"
-        ];
+    }else{
+        if($category->create()){
+            $admin_info = [
+                "status" => "success",
+                "message" => "Thêm category thành công"
+            ];
+        } else {
+            $admin_info = [
+                "status" => "fail",
+                "message" => "Thêm category thất bại"
+            ];
+        }
     }
-
     echo json_encode($admin_info);
 ?>

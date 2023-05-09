@@ -15,7 +15,7 @@
     } else {
         $category_info = [
             "status" => "fail",
-            "message" => "No user found."
+            "message" => "Không có danh mục."
         ];
     }
 

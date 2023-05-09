@@ -26,7 +26,7 @@
 	    } else {
 	        $categorys = [
 	            "status" => "fail",
-	            "message" => "No admin found."
+	            "message" => "No category found."
 	        ];
 	    }
     }
