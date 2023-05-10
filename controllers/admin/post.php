@@ -20,16 +20,30 @@ $admin->email = $data->email;
 $admin->avatar = $data->avatar;
 $admin->last_login =$data->last_login;
 $admin->status = $data->status;
-$admin->updated_at = $data->updated_at; 
-if($admin->create()){
-    $admin_info = [
-        "status" => "success",
-        "message" => "Thêm admin thành công"
-    ];
-} else {
+$admin->updated_at = $data->updated_at;
+if(empty($data->adminname) || empty($data->password)){
     $admin_info = [
         "status" => "fail",
-        "message" => "Thêm admin thất bại"
+        "message" => "Không được để trống tên TK và mật khẩu"
     ];
 }
+else if(!filter_var($data->email, FILTER_VALIDATE_EMAIL)){
+    $admin_info = [
+        "status" => "fail",
+        "message" => "Email không đúng định dạng"
+    ];
+}else{
+    if($admin->create()){
+        $admin_info = [
+            "status" => "success",
+            "message" => "Thêm admin thành công"
+        ];
+    } else {
+        $admin_info = [
+            "status" => "fail",
+            "message" => "Thêm admin thất bại"
+        ];
+    }
+}
+
 echo json_encode($admin_info);

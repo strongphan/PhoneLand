@@ -1,24 +1,24 @@
 <?php
 
     include_once("../../config/config.php");
-    include_once("../../models/EventModel.php");
+    include_once("../../models/ProductModel.php");
 
-    $event = new EventModel();
-    $stmt = $event->getAll();
+    $product = new ProductModel();
+    $stmt = $product->getAll();
     $num = $stmt -> rowCount();
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-        $event_info = [
+        $product_info = [
             "status" => "success",
             "data" => $data
         ];
     } else {
-        $event_info = [
+        $product_info = [
             "status" => "fail",
-            "message" => "No event found."
+            "message" => "Không có sản phẩm."
         ];
     }
 
-    echo json_encode($event_info);
+    echo json_encode($product_info);
 ?>
 

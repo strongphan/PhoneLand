@@ -127,7 +127,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
     }
     public function search($query, $limit)
     {
-        $sql = "SELECT * FROM admins WHERE adminname LIKE :query LIMIT :limit";
+        $sql = "SELECT * FROM admins WHERE first_name LIKE :query LIMIT :limit";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':query', "%$query%", PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);

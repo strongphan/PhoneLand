@@ -10,12 +10,12 @@
     if($admin->delete($admin->id)){
         $admin_info = [
             "status" => "success",
-            "message" => "Đăng nhập thành công"
+            "message" => "Xóa admin thành công"
         ];
     } else {
         $admin_info = [
             "status" => "fail",
-            "message" => "Tài khoản hoặc mật khẩu không chính xác"
+            "message" => "Xóa admin thất bại"
         ];
     }
     echo json_encode($admin_info);

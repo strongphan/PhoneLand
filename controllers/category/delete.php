@@ -8,12 +8,14 @@
     $category->id = isset($_GET['id']) ? $_GET['id'] : die();
 
     if($category->delete($category->id)){
-            echo json_encode(array(
-                "status" => "success",
-                'message'=>'Xóa thông tin danh mục thành công'));
-    
-    }else{
-        echo json_encode(array(
+        $category_info = [
             "status" => "success",
-            'message'=>'Xóa thông tin danh mục thất bại'));
+            "message" => "Xóa category thành công"
+        ];
+    } else {
+        $category_info = [
+            "status" => "fail",
+            "message" => "Xóa category thất bại"
+        ];
     }
+    echo json_encode($category_info);
