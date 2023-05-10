@@ -9,10 +9,6 @@
     $category = new CategoryModel();
     $data = json_decode(file_get_contents("php://input"));
     $category->admin_id = $data->admin_id;
-    if($data->name == ""){
-        echo json_encode(array('message','Thêm category thất bại'));
-        die();
-    }
     $category->name = $data->name;
     $category->type = $data->type; 
     $category->des = $data->des;

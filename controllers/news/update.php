@@ -8,7 +8,7 @@
 include_once("../../models/NewsModel.php");
 $news = new NewsModel();
 $data = json_decode(file_get_contents("php://input"));
-$news->id = isset($_GET['id']) ? $_GET['id'] : die();  
+$news->id = $data->id;  
 
 $news->category_id = $data->category_id;
 $news->name = $data->name;

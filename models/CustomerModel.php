@@ -138,7 +138,7 @@ VALUES(:username, :password, :first_name, :last_name, :phone, :address, :email, 
     }
     public function search($query, $limit)
     {
-        $sql = "SELECT * FROM users WHERE username LIKE :query LIMIT :limit";
+        $sql = "SELECT * FROM users WHERE first_name LIKE :query LIMIT :limit";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':query', "%$query%", PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);

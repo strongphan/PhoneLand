@@ -10,12 +10,12 @@
     if($customer->delete($customer->id)){
         $customer_info = [
             "status" => "success",
-            "message" => "Đăng nhập thành công"
+            "message" => "Xóa user thành công"
         ];
     } else {
         $customer_info = [
             "status" => "fail",
-            "message" => "Tài khoản hoặc mật khẩu không chính xác"
+            "message" => "Xóa user thất bại"
         ];
     }
     echo json_encode($customer_info);

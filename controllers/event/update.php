@@ -14,7 +14,7 @@ $event->image_event = $data->image_event;
 $event->description = $data->description;
 
 if( empty($data->category_id)){
-    $customer_info = [
+    $event_info = [
         "status" => "fail",
         "message" => "Không được để trống category ID"
     ];

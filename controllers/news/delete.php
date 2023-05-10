@@ -8,12 +8,14 @@
     $news->id = isset($_GET['id']) ? $_GET['id'] : die();
 
     if($news->delete($news->id)){
-            echo json_encode(array(
-                "status" => "success",
-                'message'=>'Xóa bài viết thành công'));
-    
-    }else{
-        echo json_encode(array(
+        $news_info = [
             "status" => "success",
-            'message'=>'Xóa bài viết thất bại'));
+            "message" => "Xóa news thành công"
+        ];
+    } else {
+        $news_info = [
+            "status" => "fail",
+            "message" => "Xóa news thất bại"
+        ];
     }
+    echo json_encode($news_info);

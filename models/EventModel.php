@@ -87,7 +87,7 @@ class EventModel extends Model{
     }
     public function search($query, $limit)
     {
-        $sql = "SELECT * FROM event WHERE name LIKE :query LIMIT :limit";
+        $sql = "SELECT * FROM event WHERE id LIKE :query LIMIT :limit";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':query', "%$query%", PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);

@@ -4,8 +4,11 @@
     include_once("../../models/EventModel.php");
 
     $event = new EventModel();
-    $stmt = $event->getAll();
+    $event->id = isset($_GET['category_id']) ? $_GET['category_id'] : "null";
+    $stmt = $event->getByCategoryID($event->id);
+
     $num = $stmt -> rowCount();
+
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
         $event_info = [

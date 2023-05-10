@@ -8,12 +8,14 @@
     $event->id = isset($_GET['id']) ? $_GET['id'] : die();
 
     if($event->delete($event->id)){
-            echo json_encode(array(
-                "status" => "success",
-                'message'=>'Xóa bài viết thành công'));
-    
-    }else{
-        echo json_encode(array(
+        $event_info = [
             "status" => "success",
-            'message'=>'Xóa bài viết thất bại'));
+            "message" => "Xóa event thành công"
+        ];
+    } else {
+        $event_info = [
+            "status" => "fail",
+            "message" => "Xóa event thất bại"
+        ];
     }
+    echo json_encode($event_info);

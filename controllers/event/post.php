@@ -6,7 +6,7 @@ header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type
 
 
 include_once("../../models/EventModel.php");
-$customer = new EventModel();
+$event = new EventModel();
 $data = json_decode(file_get_contents("php://input"));
 
 $event->admin_id = $data->admin_id;
@@ -14,23 +14,23 @@ $event->category_id = $data->category_id;
 $event->image_event = $data->image_event;
 $event->description = $data->description;
 if(empty($data->admin_id) || empty($data->category_id)){
-    $customer_info = [
+    $event_info = [
         "status" => "fail",
         "message" => "Không được để trống admin ID  và category ID"
     ];
 }
 else{
-    if($customer->create()){
-        $customer_info = [
+    if($event->create()){
+        $event_info = [
             "status" => "success",
-            "message" => "Thêm customer thành công"
+            "message" => "Thêm event thành công"
         ];
     } else {
-        $customer_info = [
+        $event_info = [
             "status" => "fail",
-            "message" => "Thêm customer thất bại"
+            "message" => "Thêm event thất bại"
         ];
     }
 }
 
-echo json_encode($customer_info);
+echo json_encode($event_info);

@@ -8,7 +8,7 @@
 include_once("../../models/CustomerModel.php");
 $customer = new CustomerModel();
 $data = json_decode(file_get_contents("php://input"));
-$customer->id = isset($_GET['id']) ? $_GET['id'] : die();  
+$customer->id = $data->id;  
 
 $customer->password = $data->password;
 $customer->first_name = $data->first_name;

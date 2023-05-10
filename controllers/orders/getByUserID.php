@@ -4,8 +4,8 @@
     include_once("../../models/OrderModel.php");
 
     $order = new OrderModel();
-    $order->id = isset($_GET['id']) ? $_GET['id'] : "null";
-    $stmt = $order->getById($order->id);
+    $order->id = isset($_GET['category_id']) ? $_GET['category_id'] : "null";
+    $stmt = $order->getByUserID($order->id);
 
     $num = $stmt -> rowCount();
 
@@ -22,6 +22,6 @@
         ];
     }
 
-    echo json_encode($order_info);
+    echo json_encode($product_info);
 ?>
 

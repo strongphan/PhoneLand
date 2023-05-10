@@ -3,33 +3,33 @@
     header('Content-Type: application/json');
 
     include_once("../../config/config.php");
-    include_once("../../models/CategoryModel.php");
+    include_once("../../models/ProductModel.php");
 
     $q = isset($_GET['q']) ? $_GET['q'] : "null";
     $l = isset($_GET['l']) ? $_GET['l'] : "null";
     if($q == null) {
-    	$categorys = [
+    	$products = [
             "status" => "fail",
-            "message" => "No admin found."
+            "message" => "No product found."
         ];
     }
     else {
-	    $model = new CategoryModel();
+	    $model = new ProductModel();
 	    $stmt = $model->search($q, $l);
 	    $num = $stmt -> rowCount();
 	    if ($num > 0) {
 	        $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-	        $categorys = [
+	        $products = [
 	            "status" => "success",
 	            "data" => $data
 	        ];
 	    } else {
-	        $categorys = [
+	        $products = [
 	            "status" => "fail",
-	            "message" => "No category found."
+	            "message" => "No product found."
 	        ];
 	    }
     }
-    echo json_encode($categorys);
+    echo json_encode($products);
 
 ?>

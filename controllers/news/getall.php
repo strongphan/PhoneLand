@@ -15,7 +15,7 @@
     } else {
         $news_info = [
             "status" => "fail",
-            "message" => "No user found."
+            "message" => "No news found."
         ];
     }
 

@@ -8,7 +8,7 @@
 include_once("../../models/AdminModel.php");
 $admin = new AdminModel();
 $data = json_decode(file_get_contents("php://input"));
-$admin->id = isset($_GET['id']) ? $_GET['id'] : die();  
+$admin->id = $data->id;  
 
 $admin->role = $data->role;
 $admin->password = $data->password;
