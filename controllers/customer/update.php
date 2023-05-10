@@ -22,7 +22,7 @@ $customer->last_login =$data->last_login;
 $customer->facebook =$data->facebook;
 $customer->status = $data->status;
 $customer->updated_at = $data->updated_at; 
-if(!filter_var($data->email, FILTER_VALIDATE_EMAIL)){
+if(!empty($data->email) && !filter_var($data->email, FILTER_VALIDATE_EMAIL)){
     $customer_info = [
         "status" => "fail",
         "message" => "Email không đúng định dạng"

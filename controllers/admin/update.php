@@ -21,7 +21,7 @@ $admin->avatar = $data->avatar;
 $admin->last_login =$data->last_login;
 $admin->status = $data->status;
 $admin->updated_at = $data->updated_at; 
-if(!filter_var($data->email, FILTER_VALIDATE_EMAIL)){
+if(!empty($data->email) && !filter_var($data->email, FILTER_VALIDATE_EMAIL)){
     $admin_info = [
         "status" => "fail",
         "message" => "Email không đúng định dạng"

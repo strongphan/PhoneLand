@@ -21,10 +21,10 @@
     $product->status = $data->status;
     $product->updated_at = $data->updated_at; 
 
-    if(empty($data->name)){
-        $product_info = [
+    if(empty($data->title) || empty($data->category_id)){
+        $admin_info = [
             "status" => "success",
-            "message" => "Không được để trống tên"
+            "message" => "Không được để trống category ID, tên sản phẩm"
         ];
     }else{
         if($product->create()){
