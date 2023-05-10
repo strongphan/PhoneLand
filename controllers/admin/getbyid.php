@@ -1,12 +1,13 @@
 <?php
-include_once("../../config/config.php");
-include_once("../../models/AdminModel.php");
 
-$admin = new AdminModel();
-$admin->id = isset($_GET['id']) ? $_GET['id'] : die();
-$stmt = $admin->getById($admin->id);
+    include_once("../../config/config.php");
+    include_once("../../models/AdminModel.php");
 
-$num = $stmt -> rowCount();
+    $admin = new AdminModel();
+    $admin->id = isset($_GET['id']) ? $_GET['id'] : "null";
+    $stmt = $admin->getById($admin->id);
+
+    $num = $stmt -> rowCount();
 
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
@@ -21,5 +22,6 @@ $num = $stmt -> rowCount();
         ];
     }
 
-echo json_encode($admin_info);
+    echo json_encode($admin_info);
 ?>
+
