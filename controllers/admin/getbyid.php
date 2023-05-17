@@ -24,4 +24,3 @@
 
     echo json_encode($admin_info);
 ?>
-

@@ -27,31 +27,32 @@ class AdminModel extends Model{
         $stmt->execute();
         return $stmt;
     }
+    public function getByAdminname($name){
+        $query = "SELECT * FROM admins WHERE adminname = :name";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt;
+    }
 
     public function countAdminname($name){
         $query = "SELECT count(*) as count FROM admins WHERE adminname = :adminname";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':adminname', $name, PDO::PARAM_INT);
+        $stmt->bindParam(':adminname', $name, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt;
     }
     
     public function create(){
-        $query = "INSERT INTO admins(adminname, password, role,  first_name, last_name, phone, address, email, avatar, last_login, status, updated_at)
-VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, :email, :avatar, :last_login, :status, :updated_at)";
+        $query = "INSERT INTO admins(adminname, password, role,  first_name, last_name, phone)
+VALUES(:adminname, :password, :role, :first_name, :last_name, :phone)";
         $stmt = $this->conn->prepare($query);
         $this->adminname =  htmlspecialchars(strip_tags($this->adminname));
         $this->role =       htmlspecialchars(strip_tags($this->role));
-        $this->password =   htmlspecialchars(strip_tags($this->password));
+        $this->password =   password_hash(htmlspecialchars(strip_tags($this->password)), PASSWORD_DEFAULT);
         $this->first_name =  htmlspecialchars(strip_tags($this->first_name));
         $this->last_name =  htmlspecialchars(strip_tags($this->last_name));
         $this->phone =      htmlspecialchars(strip_tags($this->phone));
-        $this->address =    htmlspecialchars(strip_tags($this->address));
-        $this->email =      htmlspecialchars(strip_tags($this->email));
-        $this->avatar =     htmlspecialchars(strip_tags($this->avatar));
-        $this->last_login = htmlspecialchars(strip_tags($this->last_login));
-        $this->status =     htmlspecialchars(strip_tags($this->status));
-        $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
 
         $stmt->bindParam(':adminname', $this->adminname);
         $stmt->bindParam(':password', $this->password);
@@ -59,12 +60,6 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $stmt->bindParam(':first_name', $this->first_name);
         $stmt->bindParam(':last_name', $this->last_name);
         $stmt->bindParam(':phone', $this->phone);
-        $stmt->bindParam(':address', $this->address);
-        $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':avatar', $this->avatar);
-        $stmt->bindParam(':last_login', $this->last_login);
-        $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':updated_at', $this->updated_at);
 
         if($stmt->execute()){
             return true;
@@ -89,7 +84,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
         $stmt = $this->conn->prepare($query);
 
         $this->role =       htmlspecialchars(strip_tags($this->role));
-        $this->password =   htmlspecialchars(strip_tags($this->password));
+        $this->password =   password_hash(htmlspecialchars(strip_tags($this->password)), PASSWORD_DEFAULT);
         $this->first_name =  htmlspecialchars(strip_tags($this->first_name));
         $this->last_name =  htmlspecialchars(strip_tags($this->last_name));
         $this->phone =      htmlspecialchars(strip_tags($this->phone));
@@ -127,7 +122,7 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone, :address, 
     }
     public function search($query, $limit)
     {
-        $sql = "SELECT * FROM admins WHERE first_name LIKE :query LIMIT :limit";
+        $sql = "SELECT * FROM admins WHERE adminname LIKE :query LIMIT :limit";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':query', "%$query%", PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
