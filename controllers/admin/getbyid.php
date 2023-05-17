@@ -11,6 +11,7 @@
 
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+        
         $admin_info = [
             "status" => "success",
             "data" => $data
