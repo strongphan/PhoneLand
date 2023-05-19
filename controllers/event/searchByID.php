@@ -2,7 +2,6 @@
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
 
-    include_once("../../config/config.php");
     include_once("../../models/EventModel.php");
 
     $q = isset($_GET['q']) ? $_GET['q'] : "null";

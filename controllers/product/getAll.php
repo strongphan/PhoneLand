@@ -1,6 +1,5 @@
 <?php
-
-    include_once("../../config/config.php");
+header("Access-Control-Allow-Origin: *");
     include_once("../../models/ProductModel.php");
 
     $product = new ProductModel();
