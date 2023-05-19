@@ -4,7 +4,6 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Request-With");
 
-include_once("../../config/config.php");
 include_once("../../models/CustomerModel.php");
 
 $user = new CustomerModel();

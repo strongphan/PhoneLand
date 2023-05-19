@@ -27,7 +27,7 @@ if(empty($data->adminname) || empty($data->password)){
         "message" => "Không được để trống tên TK và mật khẩu"
     ];
 }
-else if(!filter_var($data->email, FILTER_VALIDATE_EMAIL)){
+else if(!empty($data->email) && !filter_var($data->email, FILTER_VALIDATE_EMAIL)){
     $admin_info = [
         "status" => "fail",
         "message" => "Email không đúng định dạng"
