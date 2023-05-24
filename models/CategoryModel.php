@@ -15,12 +15,29 @@ class CategoryModel extends Model{
     public function __construct(){
         parent::__construct();
     }
-    public function getAll(){
+    public function getAll($status = null, $name = null){
         $query = "SELECT * FROM categories";
-        $stmt = $this->conn->prepare($query);
+    if (isset($status)) {
+        $query .= " WHERE status = :status";
+        if (isset($name)) {
+            $query .= " AND name LIKE :name";
+        }
+    } else {
+        if (isset($name)) {
+            $query .= " WHERE name LIKE :name";
+        }
+    }
+    $stmt = $this->conn->prepare($query);
+        if (isset($status)) {
+            $stmt->bindValue(':status', $status, PDO::PARAM_INT);
+        }
+        if (isset($name)) {
+            $stmt->bindValue(':name', "%$name%", PDO::PARAM_STR);
+        }
         $stmt->execute();
         return $stmt;
     }    
+
     public function getById($id){
         $query = "SELECT * FROM categories WHERE id = :id";
         $stmt = $this->conn->prepare($query);
@@ -29,8 +46,8 @@ class CategoryModel extends Model{
         return $stmt;
     }
     public function create(){
-        $query = "INSERT INTO categories(admin_id, name, type, avatar, description, status, updated_at)
-VALUES(:admin_id, :name, :type, :avatar, :description, :status, :updated_at)";
+        $query = "INSERT INTO categories(admin_id, name, type, avatar, description, status)
+        VALUES(:admin_id, :name, :type, :avatar, :description, :status)";
         $stmt = $this->conn->prepare($query);
         $this->admin_id = htmlspecialchars(strip_tags($this->admin_id));
         $this->name = htmlspecialchars(strip_tags($this->name));
@@ -38,7 +55,7 @@ VALUES(:admin_id, :name, :type, :avatar, :description, :status, :updated_at)";
         $this->des = htmlspecialchars(strip_tags($this->des));
         $this->avatar = htmlspecialchars(strip_tags($this->avatar));
         $this->status = htmlspecialchars(strip_tags($this->status));
-        $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
+       
 
         $stmt->bindParam(':admin_id', $this->admin_id);
         $stmt->bindParam(':name', $this->name);
@@ -46,7 +63,7 @@ VALUES(:admin_id, :name, :type, :avatar, :description, :status, :updated_at)";
         $stmt->bindParam(':avatar', $this->avatar);
         $stmt->bindParam(':description', $this->des);
         $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':updated_at', $this->updated_at);
+        
 
         if($stmt->execute()){
             return true;
@@ -86,18 +103,15 @@ VALUES(:admin_id, :name, :type, :avatar, :description, :status, :updated_at)";
         return false;
     }
     public function delete($id){
-        $query = "DELETE FROM categories WHERE id = :id";
+        $query = "
+        DELETE FROM products WHERE category_id =:id_cate;
+        DELETE FROM news WHERE category_id =:id_cate;
+        DELETE FROM event WHERE category_id =:id_cate;
+        DELETE FROM categories WHERE id = :id_cate
+        ";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt;
-    }
-    public function search($query, $limit)
-    {
-        $sql = "SELECT * FROM categories WHERE name LIKE :query LIMIT :limit";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':query', "%$query%", PDO::PARAM_STR);
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':id_cate', $id, PDO::PARAM_INT);
+        
         $stmt->execute();
         return $stmt;
     }

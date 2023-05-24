@@ -1,37 +1,75 @@
 <?php
     header("Access-Control-Allow-Origin: *");
-    header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Allow-Methods: POST");
-    header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Request-With");
+    header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With");
+    header("Access-Control-Max-Age: 86400");
 
+        include_once("../../models/CategoryModel.php");
 
-    include_once("../../models/CategoryModel.php");
-    $category = new CategoryModel();
-    $data = json_decode(file_get_contents("php://input"));
-    $category->admin_id = $data->admin_id;
-    $category->name = $data->name;
-    $category->type = $data->type; 
-    $category->des = $data->des;
-    $category->avatar = $data->avatar;
-    $category->status = $data->status;
-    $category->updated_at = $data->updated_at; 
-    if(empty($data->name)){
-        $admin_info = [
-            "status" => "success",
-            "message" => "Không được để trống tên"
-        ];
-    }else{
-        if($category->create()){
+        $category = new CategoryModel();
+        $data = json_decode(file_get_contents("php://input"));
+
+        $category->admin_id = $data->admin_id;
+        $category->name = $data->name;
+        $category->type = $data->type;
+        $category->des = $data->des;
+        $category->status = $data->status;
+
+        if($data->avatar) {
+            $avatar_base64 = $data->avatar;
+            list($type, $avatar_data) = explode(';', $avatar_base64);
+            list(, $avatar_data) = explode(',', $avatar_data);
+            $avatar_data = base64_decode($avatar_data);
+
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime_type = $finfo->buffer($avatar_data);
+            
+            $extension = '.png';
+            switch ($mime_type) {
+              case 'image/jpeg':
+                $extension = '.jpg';
+                break;
+              case 'image/png':
+                $extension = '.png';
+                break;
+              case 'image/gif':
+                $extension = '.gif';
+                break;
+              case 'image/webp':
+                $extension = '.webp';
+                break;
+              default:
+                // Nếu định dạng không được hỗ trợ, quăng lỗi
+                throw new Exception("Unsupported image format: $mime_type");
+            }
+
+            $avatar_path = 'phoneland/assets/images/' . uniqid() . $extension;
+            $category->avatar = "http://localhost/".$avatar_path;
+
+        }else {
+            $category->avatar = null;
+        }
+
+        if(empty($data->name)){
             $admin_info = [
                 "status" => "success",
-                "message" => "Thêm category thành công"
+                "message" => "Không được để trống tên"
             ];
         } else {
-            $admin_info = [
-                "status" => "fail",
-                "message" => "Thêm category thất bại"
-            ];
+            if($category->create()){
+                if($data->avatar) {
+                    file_put_contents($_SERVER['DOCUMENT_ROOT'] .'/'. $avatar_path, $avatar_data);
+                }
+                $admin_info = [
+                    "status" => "success",
+                    "message" => "Thêm category thành công"
+                ];
+            } else {
+                $admin_info = [
+                    "status" => "fail",
+                    "message" => "Thêm category thất bại"
+                ];
+            }
         }
-    }
+
     echo json_encode($admin_info);
-?>

@@ -1,5 +1,6 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+
+    include_once("../../config/config.php");
     include_once("../../models/EventModel.php");
 
     $event = new EventModel();

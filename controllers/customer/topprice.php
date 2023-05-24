@@ -6,9 +6,7 @@
     include_once("../../models/CustomerModel.php");
 
     $customer = new CustomerModel();
-    $n = $_GET['n'] != '' ? $_GET['n'] : null;
-    $s = $_GET['s'] != '' ? $_GET['s'] : null;
-    $stmt = $customer->getAll($n, $s);
+    $stmt = $customer->topPrice();
     $num = $stmt -> rowCount();
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
