@@ -16,33 +16,43 @@ $admin -> password = $data -> password;
 
 $stmt = $admin->getByAdminname($admin -> adminname);
 
-$data = $stmt -> fetch(PDO::FETCH_ASSOC);
+$row = $stmt -> rowCount();
 
-$password = $admin -> password;
+if($row > 0) {
 
-$status = $data['status'];
+    $data = $stmt -> fetch(PDO::FETCH_ASSOC);
 
-if($status == 1) {
+    $password = $admin -> password;
+
+    $status = $data['status'];
+
+    if($status == 1) {
 
     $hashed_password = $data['password'];
 
-    if (password_verify($password, $hashed_password)) {
+        if (password_verify($password, $hashed_password)) {
+            $admin_info = [
+                "status" => "success",
+                "message" => "Đăng nhập thành công",
+                "data" => $data
+            ];
+        } else {
+            $admin_info = [
+                "status" => "fail",
+                "message" => "Tài khoản hoặc mật khẩu không chính xác"
+            ];
+        }
+    }else {
         $admin_info = [
-            "status" => "success",
-            "message" => "Đăng nhập thành công",
-            "data" => $data
-        ];
-    } else {
-        $admin_info = [
-            "status" => "fail",
-            "message" => "Tài khoản hoặc mật khẩu không chính xác"
-        ];
+                "status" => "fail",
+                "message" => "Tài khoản chưa kích hoạt hoặc bị khóa"
+            ];
     }
 }else {
     $admin_info = [
-            "status" => "fail",
-            "message" => "Tài khoản chưa kích hoạt hoặc bị khóa"
-        ];
+                "status" => "fail",
+                "message" => "Tài khoản hoặc mật khẩu không chính xác"
+            ];
 }
 
 echo json_encode($admin_info);
