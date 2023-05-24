@@ -1,10 +1,13 @@
 <?php
 
+    header("Access-Control-Allow-Origin: *");
+
     include_once("../../config/config.php");
     include_once("../../models/EventModel.php");
 
     $event = new EventModel();
-    $stmt = $event->getAll();
+    $c = $_GET['c'] != '' ? $_GET['c'] : null;
+    $stmt = $event->getAll($c);
     $num = $stmt -> rowCount();
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);

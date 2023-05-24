@@ -129,11 +129,4 @@ VALUES(:adminname, :password, :role, :first_name, :last_name, :phone)";
         $stmt->execute();
         return $stmt;
     }
-    public function getPassword($adminname){
-        $sql = "SELECT password FROM admins WHERE adminname =:adminname";
-        $stmt = $this -> conn -> prepare($sql);
-        $stmt->bindValue(':adminname', $adminname, PDO::PARAM_STR);
-        $stmt -> execute();
-        return $stmt;
-    }
 }

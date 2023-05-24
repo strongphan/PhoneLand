@@ -14,7 +14,7 @@ $data = json_decode(file_get_contents("php://input"));
 $user -> username = $data -> username;
 $user -> password = $data -> password;
 
-$stmt = $user->getPassword($user -> username);
+$stmt = $user -> getPassword($user -> username);
 
 $data = $stmt -> fetch(PDO::FETCH_ASSOC);
 

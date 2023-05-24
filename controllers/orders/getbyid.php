@@ -6,14 +6,17 @@
     $order = new OrderModel();
     $order->id = isset($_GET['id']) ? $_GET['id'] : "null";
     $stmt = $order->getById($order->id);
+    $stmt_pd = $order -> getProductbyId($order->id);
+    
 
     $num = $stmt -> rowCount();
-
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+        $products = $stmt_pd -> fetchAll(PDO::FETCH_ASSOC);
         $order_info = [
             "status" => "success",
-            "data" => $data
+            "data" => $data,
+            "products" => $products
         ];
     } else {
         $order_info = [
