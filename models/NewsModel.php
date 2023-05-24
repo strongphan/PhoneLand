@@ -18,9 +18,29 @@ class NewsModel extends Model{
     public function __construct(){
         parent::__construct();
     }
-    public function getAll(){
-        $query = "SELECT * FROM news";
+    public function getAll($n, $c, $s){
+        $query = "SELECT * FROM news Where 1=1";
+        if (isset($c)) {
+            $query .= " AND category_id = :category_id";
+        }
+        if (isset($n)) {
+            $query .= " AND name LIKE :name";
+        }
+        if (isset($s)) {
+            $query .= " AND status = :status";
+        }
+
         $stmt = $this->conn->prepare($query);
+
+        if (isset($c)) {
+            $stmt->bindParam(':category_id', $c, PDO::PARAM_INT);
+        }
+        if (isset($n)) {
+            $stmt->bindValue(':name', "%$n%", PDO::PARAM_STR);
+        }
+        if (isset($s)) {
+            $stmt->bindParam(':status', $s, PDO::PARAM_INT);
+        }
         $stmt->execute();
         return $stmt;
     }
@@ -39,8 +59,8 @@ class NewsModel extends Model{
         return $stmt;
     }
     public function create(){
-        $query = "INSERT INTO news(admin_id, category_id, name, summary, content, status, seo_title, seo_descriotion, seo_keywords, updated_at)
-        Value(:admin_id, :category_id, :name, :summary, :content, :status, :seo_title, :seo_description, :seo_keywords, :updated_at)";
+        $query = "INSERT INTO news(admin_id, category_id, name, summary,avatar , content, status)
+        Value(:admin_id, :category_id, :name, :summary, :avatar, :content, :status)";
         $stmt = $this->conn->prepare($query);
 
         $this->admin_id =  htmlspecialchars(strip_tags($this->admin_id));
@@ -50,25 +70,20 @@ class NewsModel extends Model{
         $this->avatar =  htmlspecialchars(strip_tags($this->avatar));
         $this->content =  htmlspecialchars(strip_tags($this->content));
         $this->status =  htmlspecialchars(strip_tags($this->status));
-        $this->seo_title =  htmlspecialchars(strip_tags($this->seo_title));
-        $this->seo_keywords =  htmlspecialchars(strip_tags($this->seo_keywords));
-        $this->seo_description =  htmlspecialchars(strip_tags($this->seo_description));
-        $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
+        
 
-        $stmt->bindParam(':admin_id', $this->admin_id);
+        $stmt->bindParam(':admin_id', $this->admin_id, PDO::PARAM_INT);
         $stmt->bindParam(':category_id', $this->category_id);
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':summary', $this->summary);
         $stmt->bindParam(':avatar', $this->avatar);
         $stmt->bindParam(':content', $this->content);
         $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':seo_title', $this->seo_title);
-        $stmt->bindParam(':seo_description', $this->seo_description);
-        $stmt->bindParam(':seo_keywords', $this->seo_keywords);
-        $stmt->bindParam(':updates_at', $this->updated_at);
+        
         if($stmt->execute()){
             return true;
         }
+        
         return false;
     }
     public function update($id){
@@ -77,10 +92,8 @@ class NewsModel extends Model{
             name = :name, 
             summary = :summary, 
             content = :content, 
-            status = :status, 
-            seo_title = :seo_title, 
-            seo_descriotion = :seo_descriotion, 
-            seo_keywords = :seo_keywords, 
+            status = :status,
+            avatar = :avatar,
             updated_at = :updated_at
             where id = :id
         ";
@@ -92,9 +105,6 @@ class NewsModel extends Model{
         $this->avatar =  htmlspecialchars(strip_tags($this->avatar));
         $this->content =  htmlspecialchars(strip_tags($this->content));
         $this->status =  htmlspecialchars(strip_tags($this->status));
-        $this->seo_title =  htmlspecialchars(strip_tags($this->seo_title));
-        $this->seo_keywords =  htmlspecialchars(strip_tags($this->seo_keywords));
-        $this->seo_description =  htmlspecialchars(strip_tags($this->seo_description));
         $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
 
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -104,10 +114,8 @@ class NewsModel extends Model{
         $stmt->bindParam(':avatar', $this->avatar);
         $stmt->bindParam(':content', $this->content);
         $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':seo_title', $this->seo_title);
-        $stmt->bindParam(':seo_description', $this->seo_description);
-        $stmt->bindParam(':seo_keywords', $this->seo_keywords);
-        $stmt->bindParam(':updates_at', $this->updated_at);
+        $stmt->bindParam(':updated_at', $this->updated_at);
+
         if($stmt->execute()){
             return true;
         }

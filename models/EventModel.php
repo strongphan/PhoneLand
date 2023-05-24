@@ -10,9 +10,19 @@ class EventModel extends Model{
     public function __construct(){
         parent::__construct();
     }
-    public function getAll(){
+    public function getAll($c = null) {
         $query = "SELECT * FROM event";
+        if (isset($c)) {
+            $query .= " WHERE category_id = :category_id";
+        }
+        $query .= " ORDER BY category_id ASC";
+
         $stmt = $this->conn->prepare($query);
+
+        if (isset($c)) {
+            $stmt->bindParam(':category_id', $c, PDO::PARAM_INT);
+        }
+
         $stmt->execute();
         return $stmt;
     }
@@ -34,8 +44,8 @@ class EventModel extends Model{
         $query = "INSERT INTO event SET
             admin_id = :admin_id,
             category_id = :category_id, 
-            image_event = : image_event,
-            description := :description
+            image_event = :image_event,
+            description = :description
         ";
         $stmt = $this->conn->prepare($query);
 
@@ -58,7 +68,7 @@ class EventModel extends Model{
     public function update($id){
         $query = "UPDATE event SET
             category_id = :category_id, 
-            image_event = : image_event,
+            image_event = :image_event,
             description = :description
             where id = :id
         ";
@@ -69,14 +79,12 @@ class EventModel extends Model{
         $this->description =  htmlspecialchars(strip_tags($this->description));
         
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':category_id', $this->category_id);
+        $stmt->bindParam(':category_id', $this->category_id, PDO::PARAM_INT);
         $stmt->bindParam(':image_event', $this->image_event);
         $stmt->bindParam(':description', $this->description);
 
-        if($stmt->execute()){
-            return true;
-        }
-        return false;
+        $stmt->execute();
+        return $stmt;
     }
     public function delete($id){
         $query = "DELETE FROM event WHERE id = :id";

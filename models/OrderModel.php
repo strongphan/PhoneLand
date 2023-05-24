@@ -16,10 +16,33 @@ class OrderModel extends Model{
     public function __construct(){
         parent::__construct();
     }
-    public function getAll(){
-        $query = "SELECT * FROM orders";
+    public function getAll($id, $time) {
+        $query = "SELECT * FROM orders WHERE 1=1 ";
+        
+        if (isset($id)) {
+            $query .= " AND id = :id";
+        }
+        if (isset($time)) {
+            if ($time == 1) {
+                $query .= " AND DATE(created_at) = CURDATE()";
+            } else if ($time == 2) {
+                $query .= " AND YEARWEEK(created_at) = YEARWEEK(NOW())";
+            } else if ($time == 3) {
+                $query .= " AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())";
+            } else if ($time == 4) {
+                $query .= " AND YEAR(created_at) = YEAR(NOW())";
+            }
+        } else {
+            // Thêm điều kiện mặc định nếu $time không tồn tại
+            $query .= " AND YEAR(created_at) = YEAR(NOW())";
+        }
+
         $stmt = $this->conn->prepare($query);
+        if (isset($id)) {
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        }
         $stmt->execute();
+
         return $stmt;
     }
     public function getByID($id){
@@ -29,6 +52,37 @@ class OrderModel extends Model{
         $stmt->execute();
         return $stmt;
     }
+
+    public function countPrice(){
+        $query = "SELECT
+    COUNT(CASE WHEN DATE(created_at) = CURDATE() THEN id ELSE NULL END) as today_order_count,
+    COUNT(CASE WHEN DATE(created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY) THEN id ELSE NULL END) as yesterday_order_count,
+    SUM(CASE WHEN DATE(created_at) = CURDATE() THEN price_total ELSE 0 END) as today_total_amount,
+    SUM(CASE WHEN DATE(created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY) THEN price_total ELSE 0 END) as yesterday_total_amount
+FROM orders";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function getRecents() {
+        $query = "SELECT * FROM orders INNER JOIN users on orders.user_id = users.id ORDER BY orders.created_at DESC LIMIT 7";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    public function getProductbyId($id) {
+        $query = "SELECT * FROM orders INNER JOIN order_details ON orders.id = order_details.order_id INNER JOIN products ON order_details.product_id = products.id WHERE orders.id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
+
     public function getByUserID($id){
         $query = "SELECT * FROM orders WHERE user_id = :id";
         $stmt = $this->conn->prepare($query);

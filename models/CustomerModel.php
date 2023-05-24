@@ -28,12 +28,60 @@ class CustomerModel extends Model{
         $stmt->execute();
         return $stmt;
     }
-    public function getAll(){
-        $query = "SELECT * FROM users";
+    public function getAll($name, $status){
+        $query = "SELECT * FROM users WHERE 1=1";
+        if(isset($name)) {
+            $query .= " AND username LIKE :name";
+        }
+        if(isset($status)) {
+            $query .= " AND status = :status";
+        }
         $stmt = $this->conn->prepare($query);
+
+        $query = "SELECT * FROM users WHERE 1=1";
+        if(isset($name)) {
+            $stmt -> bindValue(':name', "%$name%", PDO::PARAM_STR);
+        }
+        if(isset($status)) {
+            $stmt -> bindParam(':status', $status, PDO::PARAM_INT);
+        }
+
         $stmt->execute();
         return $stmt;
-    }    
+    }  
+
+    public function getOrder($id)
+    {
+        $query = "SELECT user_id, COUNT(id) as order_count, SUM(price_total) as total_payment FROM orders WHERE user_id = :user_id GROUP BY user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt -> bindParam(':user_id', $id, PDO::PARAM_INT);
+
+        $stmt -> execute();
+        return $stmt;
+
+    }
+
+    public function countUsers() {
+        $query = "SELECT
+        SUM(CASE WHEN DATE(created_at) = CURDATE() THEN 1 ELSE 0 END) as today_count,
+        SUM(CASE WHEN DATE(created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY) THEN 1 ELSE 0 END) as yesterday_count FROM users";
+        
+        $stmt = $this->conn->prepare($query);
+
+        $stmt -> execute();
+        return $stmt;
+    }
+
+    public function topPrice() {
+        $query = "SELECT user_id,username, SUM(price_total) as total_amount FROM orders INNER JOIN users ON orders.user_id = users.id GROUP BY user_id ORDER BY price_total DESC LIMIT 5;";
+        
+        $stmt = $this->conn->prepare($query);
+
+        $stmt -> execute();
+        return $stmt;
+    }
+
+
     public function countusername($name){
         $query = "SELECT count(*) as count FROM users WHERE username = :username";
         $stmt = $this->conn->prepare($query);
@@ -58,7 +106,7 @@ VALUES(:username, :password, :first_name, :last_name, :phone, :address, :email, 
         $this->last_login = htmlspecialchars(strip_tags($this->last_login));
         $this->facebook = htmlspecialchars(strip_tags($this->facebook));
         $this->status =     htmlspecialchars(strip_tags($this->status));
-        $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
+        
 
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':password', $this->password);

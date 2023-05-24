@@ -9,13 +9,49 @@
     $category = new CategoryModel();
     $data = json_decode(file_get_contents("php://input"));
     
+    $category->des = $data->des;
     $category->id = $data->id;
     $category->name = $data->name;
     $category->type = $data->type;
     $category->des = $data->des;
-    $category->avatar = $data->avatar;
     $category->status = $data->status;
-    $category->updated_at = $data->updated_at; 
+    $category->updated_at = (new \DateTime())->format('Y-m-d H:i:s'); 
+
+    
+    if(strpos($data->avatar, "data:image") === 0) {
+            $avatar_base64 = $data->avatar;
+            list($type, $avatar_data) = explode(';', $avatar_base64);
+            list(, $avatar_data) = explode(',', $avatar_data);
+            $avatar_data = base64_decode($avatar_data);
+
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime_type = $finfo->buffer($avatar_data);
+            
+            $extension = '.png';
+            switch ($mime_type) {
+              case 'image/jpeg':
+                $extension = '.jpg';
+                break;
+              case 'image/png':
+                $extension = '.png';
+                break;
+              case 'image/gif':
+                $extension = '.gif';
+                break;
+              case 'image/webp':
+                $extension = '.webp';
+                break;
+              default:
+                // Nếu định dạng không được hỗ trợ, quăng lỗi
+                throw new Exception("Unsupported image format: $mime_type");
+            }
+
+            $avatar_path = 'phoneland/assets/images/' . uniqid() . $extension;
+            $category->avatar = "http://localhost/".$avatar_path;
+
+    }else {
+        $category->avatar = $data->avatar;
+    }
 
     if(empty($data->name)){
         $admin_info = [
@@ -24,6 +60,9 @@
         ];
     }else{
         if($category->update($category->id)){
+            if(strpos($data->avatar, "data:image") === 0) {
+                file_put_contents($_SERVER['DOCUMENT_ROOT'] .'/'. $avatar_path, $avatar_data);
+            }
             $admin_info = [
                 'status'=>'success',
                 'message'=>'Sửa category thành công'
