@@ -115,4 +115,13 @@ class CategoryModel extends Model{
         $stmt->execute();
         return $stmt;
     }
+    public function search($query, $limit)
+    {
+        $sql = "SELECT * FROM categories WHERE id LIKE :query LIMIT :limit";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':query', "%$query%", PDO::PARAM_STR);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
 }
