@@ -13,6 +13,7 @@ class OrderModel extends Model{
     public $payment_status;
     public $created_at;
     public $updated_at;
+    
     public function __construct(){
         parent::__construct();
     }
@@ -90,6 +91,23 @@ FROM orders";
         $stmt->execute();
         return $stmt;
     }
+
+    public function createOrderDetail($order_id, $product_id, $product_price, $quantity) {
+        $query = "INSERT INTO order_details (order_id, product_id, product_price, quantity) VALUES (:order_id, :product_id, :product_price, :quantity)";
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":order_id", $order_id);
+        $stmt->bindParam(":product_id", $product_id);
+        $stmt->bindParam(":product_price", $product_price);
+        $stmt->bindParam(":quantity", $quantity);
+
+        if($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function create(){
         $query = "INSERT INTO orders SET
             user_id = :user_id,
@@ -98,21 +116,17 @@ FROM orders";
             mobile = :mobile,
             email = :email,
             note = :note,
-            price_total = :price_total,
-            payment_status = :payment_status,
-            updated_at = :updated_at
+            price_total = :price_total
         ";
         $stmt = $this->conn->prepare($query);
 
-        $this->user_id =  htmlspecialchars(strip_tags($this->user_id));
-        $this->fullname =  htmlspecialchars(strip_tags($this->fullname));
-        $this->address =  htmlspecialchars(strip_tags($this->address));
-        $this->mobile =  htmlspecialchars(strip_tags($this->mobile));
-        $this->email =  htmlspecialchars(strip_tags($this->email));
-        $this->note =  htmlspecialchars(strip_tags($this->note));
-        $this->price_total =  htmlspecialchars(strip_tags($this->price_total));
-        $this->payment_status =  htmlspecialchars(strip_tags($this->payment_status));
-        $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
+        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        $this->fullname = htmlspecialchars(strip_tags($this->fullname));
+        $this->address = htmlspecialchars(strip_tags($this->address));
+        $this->mobile = htmlspecialchars(strip_tags($this->mobile));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->note = htmlspecialchars(strip_tags($this->note));
+        $this->price_total = htmlspecialchars(strip_tags($this->price_total));
 
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':fullname', $this->fullname);
@@ -121,10 +135,9 @@ FROM orders";
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':note', $this->note);
         $stmt->bindParam(':price_total', $this->price_total);
-        $stmt->bindParam(':payment_status', $this->payment_status);
-        $stmt->bindParam(':updated_at', $this->updated_at);
         
         if($stmt->execute()){
+            $this->id = $this->conn->lastInsertId();
             return true;
         }
         return false;
@@ -151,7 +164,6 @@ FROM orders";
         $this->email =  htmlspecialchars(strip_tags($this->email));
         $this->note =  htmlspecialchars(strip_tags($this->note));
         $this->price_total =  htmlspecialchars(strip_tags($this->price_total));
-        $this->payment_status =  htmlspecialchars(strip_tags($this->payment_status));
         $this->updated_at =  htmlspecialchars(strip_tags($this->updated_at));
 
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -162,8 +174,6 @@ FROM orders";
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':note', $this->note);
         $stmt->bindParam(':price_total', $this->price_total);
-        $stmt->bindParam(':payment_status', $this->payment_status);
-        $stmt->bindParam(':updated_at', $this->updated_at);
 
         if($stmt->execute()){
             return true;

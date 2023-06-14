@@ -51,7 +51,41 @@ class ProductModel extends Model{
 
         $stmt->execute();
         return $stmt;
-    }    
+    }  
+
+public function Search($name, $l1, $l2, $sort){
+        $query = "SELECT * FROM products Where 1 = 1 ";
+        if(isset($name)) {
+            $query.= " AND title LIKE :name";
+        }
+        if($l2 > 0) {
+            $query.= " AND price BETWEEN :l1 AND :l2";
+        }
+        $query.= " AND status = 1";
+        if($sort == 1) {
+            $query.= " ORDER BY price ASC";
+        }else{
+            $query.= " ORDER BY price DESC";
+        }
+       
+            
+        
+        
+        $stmt = $this->conn->prepare($query);
+
+        if(isset($name)) {
+            $stmt -> bindValue(':name', "%$name%", PDO::PARAM_STR);
+        }
+        if($l2 > 0) {
+            $stmt -> bindParam(':l1', $l1);
+            $stmt -> bindParam(':l2', $l2);
+        }
+
+        $stmt->execute();
+        return $stmt;
+    }  
+
+
     public function getById($id){
         $query = "SELECT * FROM products WHERE id = :id";
         $stmt = $this->conn->prepare($query);
@@ -158,13 +192,5 @@ class ProductModel extends Model{
         $stmt->execute();
         return $stmt;
     }
-    public function search($query, $limit)
-    {
-        $sql = "SELECT * FROM products WHERE title LIKE :query LIMIT :limit";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':query', "%$query%", PDO::PARAM_STR);
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt;
-    }
+    
 }

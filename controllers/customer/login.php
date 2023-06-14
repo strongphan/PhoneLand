@@ -16,22 +16,32 @@ $user -> password = $data -> password;
 
 $stmt = $user -> getPassword($user -> username);
 
-$data = $stmt -> fetch(PDO::FETCH_ASSOC);
 
-$password = $user -> password;
-
-$hashed_password = $data['password'];
-
-if (password_verify($password, $hashed_password)) {
-    $user_info = [
-        "status" => "success",
-        "message" => "Đăng nhập thành công"
-    ];
-} else {
+if($stmt -> rowCount() <= 0) {
     $user_info = [
         "status" => "fail",
         "message" => "Tài khoản hoặc mật khẩu không chính xác"
     ];
+}else {
+    $data2 = $stmt -> fetch();
+
+    $password = $user -> password;
+
+    $hashed_password = $data2['password'];
+
+    if (password_verify($password, $hashed_password)) {
+        $user_info = [
+            "status" => "success",
+            "message" => "Đăng nhập thành công",
+            "id" => $data2['id']
+        ];
+    } else {
+        $user_info = [
+            "status" => "fail",
+            "message" => "Tài khoản hoặc mật khẩu không chính xác"
+        ];
+    }
 }
+
 
 echo json_encode($user_info);

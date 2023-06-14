@@ -19,6 +19,43 @@
     foreach($data as $field => $value) {
         $customer-> $field = $value;
     }
+
+    if(strpos($data->avatar, "data:image") === 0) {
+            $avatar_base64 = $data->avatar;
+            list($type, $avatar_data) = explode(';', $avatar_base64);
+            list(, $avatar_data) = explode(',', $avatar_data);
+            $avatar_data = base64_decode($avatar_data);
+
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime_type = $finfo->buffer($avatar_data);
+            
+            $extension = '.png';
+            switch ($mime_type) {
+              case 'image/jpeg':
+                $extension = '.jpg';
+                break;
+              case 'image/png':
+                $extension = '.png';
+                break;
+              case 'image/gif':
+                $extension = '.gif';
+                break;
+              case 'image/webp':
+                $extension = '.webp';
+                break;
+              default:
+                // Nếu định dạng không được hỗ trợ, quăng lỗi
+                throw new Exception("Unsupported image format: $mime_type");
+            }
+
+            $avatar_path = 'phoneland/assets/images/' . uniqid() . $extension;
+            $customer->avatar = "http://localhost/".$avatar_path;
+
+    }else {
+        $customer->avatar = $data->avatar;
+    }
+
+
     if(!empty($data->email) && !filter_var($data->email, FILTER_VALIDATE_EMAIL)){
         $customer_info = [
             "status" => "fail",
@@ -26,6 +63,9 @@
         ];
     }else{
         if($customer->update($customer->id)){
+            if(strpos($data->avatar, "data:image") === 0) {
+                file_put_contents($_SERVER['DOCUMENT_ROOT'] .'/'. $avatar_path, $avatar_data);
+            }
             $customer_info = [
                 "status" => "success",
                 "message" => "sửa thông tin customer thành công"

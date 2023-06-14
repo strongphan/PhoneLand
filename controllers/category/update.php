@@ -17,7 +17,6 @@
     $category->status = $data->status;
     $category->updated_at = (new \DateTime())->format('Y-m-d H:i:s'); 
 
-    
     if(strpos($data->avatar, "data:image") === 0) {
             $avatar_base64 = $data->avatar;
             list($type, $avatar_data) = explode(';', $avatar_base64);

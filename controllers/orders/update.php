@@ -17,7 +17,7 @@
     $order->note = $data->note;
     $order->price_total = $data->price_total;
     $order->payment_status = $data->payment_status;
-    $order->updated_at = $data->updated_at; 
+    $order->updated_at = getdate(); 
 
     if(empty($data->fullname) || empty($data->email) || empty($data->mobile) || empty($data->address)){
         $admin_info = [

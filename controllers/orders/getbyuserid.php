@@ -5,18 +5,15 @@
 
     $order = new OrderModel();
     $order->id = isset($_GET['id']) ? $_GET['id'] : "null";
-    $stmt = $order->getById($order->id);
-    $stmt_pd = $order -> getProductbyId($order->id);
+    $stmt = $order -> getByUserID($order->id);
     
 
     $num = $stmt -> rowCount();
     if ($num > 0) {
         $data = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-        $products = $stmt_pd -> fetchAll(PDO::FETCH_ASSOC);
         $order_info = [
             "status" => "success",
-            "data" => $data,
-            "products" => $products
+            "data" => $data
         ];
     } else {
         $order_info = [
